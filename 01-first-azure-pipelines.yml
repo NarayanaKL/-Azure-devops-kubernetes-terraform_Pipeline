@@ -28,7 +28,13 @@ jobs:
   - script: echo Hello, world changes Azure Devops 2!
     displayName: 'Run a one-line script'
 - job: job3
-  
+  steps:
+  - script: echo Hello, world changes Azure Devops 2!
+    displayName: 'Run a one-line script'
+- job: job4
+  dependsOn:
+   - job2
+   - job3
   steps:
   - script: echo Hello, world changes Azure Devops 2!
     displayName: 'Run a one-line script'
