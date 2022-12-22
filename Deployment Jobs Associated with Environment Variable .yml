@@ -29,7 +29,7 @@ stages:
            deploy:
               steps:
                 - script: echo deploy to Dev
-- stage: DQADeploy
+- stage: QADeploy
   jobs:
     - deployment: QADeployJob
       environment: Dev
