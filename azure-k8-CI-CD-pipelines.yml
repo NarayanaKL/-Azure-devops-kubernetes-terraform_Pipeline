@@ -47,7 +47,12 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'manfiest'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
 #1 build the Docker Image
 # 2 Get k8 files
 # 3Deploye to k8 cluster 
