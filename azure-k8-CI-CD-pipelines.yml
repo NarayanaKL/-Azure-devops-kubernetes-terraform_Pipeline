@@ -1,0 +1,53 @@
+#build the image
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+#Stage 1
+#Build the image
+#Publish the Artifact
+
+
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'lokanarayana-docker-hub'
+        repository: 'lokanarayana/exchange'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+# publish the K8 files and create the Artifates and availabe in pipeline
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manfiest'
+        publishLocation: 'Container'
+# stage 1 is compleated we have build the docker images and we are ready to publish the k8 file
+
+# stage 2
+- stage: Deploy
+  displayName: Deploy image
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    
+#1 build the Docker Image
+# 2 Get k8 files
+# 3Deploye to k8 cluster 
