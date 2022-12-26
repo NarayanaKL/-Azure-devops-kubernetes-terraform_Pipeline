@@ -24,12 +24,12 @@ steps:
     backendAzureRmResourceGroupLocation: 'westeurope'
     backendAzureRmStorageAccountName: 'storagelokaxyz'
     backendAzureRmContainerName: 'storagelokacontainer'
-    backendAzureRmKey: 'kubernetes-dev-tfstate'
-    allowTelemetryCollection: true
+    backendAzureRmKey: 'kubernetes-dev.tfstate'
 
 - task: TerraformCLI@0
   inputs:
     command: 'apply'
     workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes'
-    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publickey.secureFilePath)'
     environmentServiceName: 'Azure subscription 1(809a0ecd-df5c-4541-bee0-4320f082c730)'
+    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publickey.secureFilePath)'
+  
