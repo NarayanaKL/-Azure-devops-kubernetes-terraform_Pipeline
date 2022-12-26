@@ -10,23 +10,22 @@ variables:
 
 stages:
 #Stage 1
-#Build the image
+#Build the docker image
 #Publish the Artifact
 
 
 - stage: Build
   displayName: Build image
-  jobs:
+  jobs:  
   - job: Build
     displayName: Build
     pool:
-      vmImage: ubuntu-latest
+      vmImage: 'ubuntu-latest'
     steps:
     - task: Docker@2
-      displayName: Build an image
       inputs:
-        containerRegistry: 'lokanarayana-docker-hub'
-        repository: 'lokanarayana/exchange'
+        containerRegistry: 'lokanarayan-docker-hub'
+        repository: 'lokanarayana/currency-exchange-devops'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
@@ -38,7 +37,9 @@ stages:
         publishLocation: 'Container'
 # stage 1 is compleated we have build the docker images and we are ready to publish the k8 file
 
-# stage 2
+# stage 2 downloading file into the artifacts directory
+# 2 Get k8 files
+# 3 Deploye to k8 cluster  with docker image
 - stage: Deploy
   displayName: Deploy image
   jobs:
@@ -53,6 +54,14 @@ stages:
         artifactName: 'manfiest'
         itemPattern: '**/*.yaml'
         targetPath: '$(System.ArtifactsDirectory)'
-#1 build the Docker Image
-# 2 Get k8 files
-# 3Deploye to k8 cluster 
+
+#Run the K8 
+# deploy k8
+
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'Azure-K8-Connection'
+        namespace: 'default'
+        manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml' # deployment .yam file to execute
+        containers: 'lokanarayana/currency-exchange-devops:$(tage)' #tage is buidid 
