@@ -12,8 +12,6 @@ stages:
 #Stage 1
 #Build the docker image
 #Publish the Artifact
-
-
 - stage: Build
   displayName: Build image
   jobs:  
@@ -25,7 +23,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'lokanarayan-docker-hub'
-        repository: 'lokanarayana/currency-exchange-devops'
+        repository: 'lokanarayana/hello-world-java'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
@@ -64,4 +62,4 @@ stages:
         kubernetesServiceConnection: 'Azure-K8-Connection'
         namespace: 'default'
         manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml' # deployment .yam file to execute
-        containers: 'lokanarayana/currency-exchange-devops:$(tage)' #tage is buidid 
+        containers: 'lokanarayana/hello-world-java:$(tage)' #tage is buidid 
